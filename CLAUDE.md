@@ -14,16 +14,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture
 ECS (Entity Component System) architecture.
 
-### Package Structure
-- `main.go` — Entry point (window 960x720)
-- `internal/game` — Game struct, scene management (Title/Playing), ECS setup
-- `internal/component` — ECS component & tag definitions
-- `internal/archetype` — Entity factory functions
-- `internal/system` — ECS systems (update logic) and renderers
-- `internal/layer` — Render layer order
-- `internal/event` — Event type definitions
-- `internal/config` — Screen size constants
-
 ## Code Implementation
 When changing or creating code, you must follow the rules below.
 
@@ -39,6 +29,10 @@ When changing or creating code, you must follow the rules below.
    - Run the `go tool golangci-lint run ./...` command and confirm that lint check passes.
    - Run the `go test ./... -cover` command and confirm that all tests pass.
    - Run the `go build -o ./out/go-space` command and confirm that the build succeeds.
+4. **Commit and create a Pull Request.**
+   - After all checks pass, follow the Git Workflow section to create a branch, commit, push, and open a PR.
+   - Proceed without asking the user for confirmation.
+   - Always create PRs as drafts (`--draft`).
 
 ### Conventions
 - Code comments must be written in Japanese, using the format: `// Name : 説明。`
