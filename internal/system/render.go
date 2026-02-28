@@ -119,7 +119,7 @@ func DrawHUD(e *ecs.ECS, screen *ebiten.Image) {
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("FPS: %.0f", ebiten.ActualFPS()), 8, 40)
 
 	if gs.GameOver {
-		ebitenutil.DebugPrintAt(screen, "GAME OVER - Press R to Restart",
-			config.ScreenWidth/2-100, config.ScreenHeight/2)
+		ebitenutil.DebugPrintAt(screen, "GAME OVER - Press R to Return to Title",
+			config.ScreenWidth/2-120, config.ScreenHeight/2)
 	}
 }

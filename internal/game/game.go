@@ -1,7 +1,10 @@
 package game
 
 import (
+	"image/color"
+
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"
@@ -13,14 +16,20 @@ import (
 	"github.com/atEaE/go-space/internal/system"
 )
 
+type Scene int
+
+const (
+	SceneTitle Scene = iota
+	ScenePlaying
+)
+
 type Game struct {
-	ecs *ecs.ECS
+	scene Scene
+	ecs   *ecs.ECS
 }
 
 func New() *Game {
-	g := &Game{}
-	g.ecs = g.setupECS()
-	return g
+	return &Game{scene: SceneTitle}
 }
 
 func (g *Game) setupECS() *ecs.ECS {
@@ -58,20 +67,37 @@ func (g *Game) setupECS() *ecs.ECS {
 }
 
 func (g *Game) Update() error {
-	gs := component.GameState.Get(component.GameState.MustFirst(g.ecs.World))
-	if gs.GameOver {
-		if inpututil.IsKeyJustPressed(ebiten.KeyR) {
+	switch g.scene {
+	case SceneTitle:
+		if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 			g.ecs = g.setupECS()
+			g.scene = ScenePlaying
 		}
-		return nil
+	case ScenePlaying:
+		gs := component.GameState.Get(component.GameState.MustFirst(g.ecs.World))
+		if gs.GameOver {
+			if inpututil.IsKeyJustPressed(ebiten.KeyR) {
+				g.ecs = nil
+				g.scene = SceneTitle
+			}
+			return nil
+		}
+		g.ecs.Update()
 	}
-
-	g.ecs.Update()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	g.ecs.Draw(screen)
+	switch g.scene {
+	case SceneTitle:
+		screen.Fill(color.RGBA{R: 30, G: 30, B: 30, A: 255})
+		ebitenutil.DebugPrintAt(screen, "Vampire Survivors Mini",
+			config.ScreenWidth/2-70, config.ScreenHeight/3)
+		ebitenutil.DebugPrintAt(screen, "Press Space to Start",
+			config.ScreenWidth/2-65, config.ScreenHeight*2/3)
+	case ScenePlaying:
+		g.ecs.Draw(screen)
+	}
 }
 
 func (g *Game) Layout(_, _ int) (int, int) {
