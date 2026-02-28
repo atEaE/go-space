@@ -9,7 +9,7 @@ import (
 	"github.com/atEaE/go-space/internal/component"
 )
 
-// CreatePlayer はプレイヤーエンティティを生成する (HP:100, Speed:3.0, Weapon cooldown:20)。
+// CreatePlayer : プレイヤーエンティティを生成する (HP:100, Speed:3.0, Weapon cooldown:20)。
 func CreatePlayer(w donburi.World) *donburi.Entry {
 	entity := w.Create(
 		component.PlayerTag,
@@ -34,7 +34,7 @@ func CreatePlayer(w donburi.World) *donburi.Entry {
 	return entry
 }
 
-// CreateEnemy はプレイヤーから300〜400距離のランダムな位置に敵を生成する。
+// CreateEnemy : プレイヤーから300〜400距離のランダムな位置に敵を生成する。
 func CreateEnemy(w donburi.World, playerX, playerY float64) *donburi.Entry {
 	angle := rand.Float64() * 2 * math.Pi
 	dist := 300.0 + rand.Float64()*100.0
@@ -62,7 +62,7 @@ func CreateEnemy(w donburi.World, playerX, playerY float64) *donburi.Entry {
 	return entry
 }
 
-// CreateBullet は指定座標(x,y)に、指定された速度とダメージを持つ弾を生成する。
+// CreateBullet : 指定座標(x,y)に、指定された速度とダメージを持つ弾を生成する。
 func CreateBullet(w donburi.World, x, y, vx, vy float64, damage int) *donburi.Entry {
 	entity := w.Create(
 		component.BulletTag,
@@ -79,7 +79,7 @@ func CreateBullet(w donburi.World, x, y, vx, vy float64, damage int) *donburi.En
 	return entry
 }
 
-// CreateGem は指定座標(x,y)に経験値ジェムを生成する。
+// CreateGem : 指定座標(x,y)に経験値ジェムを生成する。
 func CreateGem(w donburi.World, x, y float64, amount int) *donburi.Entry {
 	entity := w.Create(
 		component.GemTag,
@@ -94,7 +94,7 @@ func CreateGem(w donburi.World, x, y float64, amount int) *donburi.Entry {
 	return entry
 }
 
-// CreateGameWorld はCamera、Spawner、GameStateのシングルトンエンティティを生成する。
+// CreateGameWorld : Camera、Spawner、GameStateのシングルトンエンティティを生成する。
 func CreateGameWorld(w donburi.World) {
 	// Camera singleton
 	camEntity := w.Create(component.Camera)
