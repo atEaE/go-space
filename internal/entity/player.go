@@ -1,15 +1,13 @@
-package main
+package entity
 
 import (
-	"image/color"
 	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
 )
 
 type Player struct {
-	X, Y    float64
+	Pos     Position
 	HP      int
 	MaxHP   int
 	Level   int
@@ -21,12 +19,9 @@ type Player struct {
 
 func NewPlayer() *Player {
 	return &Player{
-		X:       0,
-		Y:       0,
 		HP:      100,
 		MaxHP:   100,
 		Level:   1,
-		EXP:     0,
 		NextEXP: 10,
 		Speed:   3.0,
 		Radius:  8,
@@ -49,18 +44,13 @@ func (p *Player) Update() {
 	}
 
 	if dx != 0 && dy != 0 {
-		len := math.Sqrt(dx*dx + dy*dy)
-		dx /= len
-		dy /= len
+		l := math.Sqrt(dx*dx + dy*dy)
+		dx /= l
+		dy /= l
 	}
 
-	p.X += dx * p.Speed
-	p.Y += dy * p.Speed
-}
-
-func (p *Player) Draw(screen *ebiten.Image, cam *Camera) {
-	sx, sy := cam.WorldToScreen(p.X, p.Y)
-	vector.FillCircle(screen, sx, sy, float32(p.Radius), color.White, true)
+	p.Pos.X += dx * p.Speed
+	p.Pos.Y += dy * p.Speed
 }
 
 func (p *Player) TakeDamage(dmg int) {
