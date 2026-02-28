@@ -41,6 +41,7 @@ When changing or creating code, you must follow the rules below.
    - Run the `go build -o ./out/go-space` command and confirm that the build succeeds.
 
 ### Conventions
+- Code comments must be written in Japanese
 - Events propagate via Donburi's event bus
 - Components defined with `donburi.NewComponentType`
 - Entity creation through factory functions in `archetype` package
