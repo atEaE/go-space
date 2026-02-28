@@ -46,6 +46,30 @@ When changing or creating code, you must follow the rules below.
 - Components defined with `donburi.NewComponentType`
 - Entity creation through factory functions in `archetype` package
 
+## Git Workflow
+Follow these steps when creating a Pull Request.
+
+### Branch
+- Create a working branch from `main`
+- Branch name format: `<type>/<description>`
+  - `feat/` — New feature
+  - `fix/` — Bug fix
+  - `chore/` — Miscellaneous tasks (config, tools, etc.)
+  - `ci/` — CI/CD related
+  - `refactor/` — Refactoring
+  - `doc/` — Documentation changes
+
+### Commit
+- Make commits in the smallest meaningful units. Do not create big commits.
+- Commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/)
+- Examples: `feat: add player health system`, `fix: correct collision detection`
+
+### Pull Request
+1. Create a branch: `git checkout -b <type>/<description>`
+2. Commit changes
+3. Push to remote: `git push -u origin <branch-name>`
+4. Create PR: `gh pr create`
+
 ## Security Guidelines
 **Security practices:**
 - Never expose or log secrets and keys
