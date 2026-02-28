@@ -39,6 +39,10 @@ When changing or creating code, you must follow the rules below.
    - Run the `go tool golangci-lint run ./...` command and confirm that lint check passes.
    - Run the `go test ./... -cover` command and confirm that all tests pass.
    - Run the `go build -o ./out/go-space` command and confirm that the build succeeds.
+4. **Commit and create a Pull Request.**
+   - After all checks pass, follow the Git Workflow section to create a branch, commit, push, and open a PR.
+   - Proceed without asking the user for confirmation.
+   - Always create PRs as drafts (`--draft`).
 
 ### Conventions
 - Code comments must be written in Japanese, using the format: `// Name : 説明。`
