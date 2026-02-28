@@ -1,7 +1,12 @@
 {
   "permissions": {
+    "defaultMode": "plan",
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:ebitengine.org)",
+      "Bash(go mod tidy)",
+      "Bash(go build *)"
     ],
     "deny": [
       "Edit(.claude/settings.json)"
