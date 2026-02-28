@@ -14,16 +14,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture
 ECS (Entity Component System) architecture.
 
-### Package Structure
-- `main.go` — Entry point (window 960x720)
-- `internal/game` — Game struct, scene management (Title/Playing), ECS setup
-- `internal/component` — ECS component & tag definitions
-- `internal/archetype` — Entity factory functions
-- `internal/system` — ECS systems (update logic) and renderers
-- `internal/layer` — Render layer order
-- `internal/event` — Event type definitions
-- `internal/config` — Screen size constants
-
 ## Code Implementation
 When changing or creating code, you must follow the rules below.
 
