@@ -5,6 +5,7 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:ebitengine.org)",
+      "WebFetch(domain:ebiten.org)",
       "Bash(go mod tidy)",
       "Bash(go build *)"
     ],
