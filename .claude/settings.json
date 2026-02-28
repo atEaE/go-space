@@ -2,6 +2,7 @@
   "permissions": {
     "defaultMode": "plan",
     "allow": [
+      "Agent",
       "WebSearch",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:ebitengine.org)",

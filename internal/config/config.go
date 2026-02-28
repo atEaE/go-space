@@ -1,4 +1,4 @@
-package game
+package config
 
 const (
 	ScreenWidth  = 640

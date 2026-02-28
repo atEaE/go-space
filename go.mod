@@ -2,7 +2,10 @@ module github.com/atEaE/go-space
 
 go 1.25.2
 
-require github.com/hajimehoshi/ebiten/v2 v2.9.8
+require (
+	github.com/hajimehoshi/ebiten/v2 v2.9.8
+	github.com/yohamta/donburi v1.15.7
+)
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0 // indirect

@@ -3,64 +3,68 @@ package system
 import (
 	"math"
 
-	"github.com/atEaE/go-space/internal/entity"
+	"github.com/yohamta/donburi"
+	"github.com/yohamta/donburi/ecs"
+	"github.com/yohamta/donburi/filter"
+
+	"github.com/atEaE/go-space/internal/archetype"
+	"github.com/atEaE/go-space/internal/component"
 )
 
-type Weapon struct {
-	Cooldown    int
-	Timer       int
-	BulletSpeed float64
-	Damage      int
-}
+var queryWeaponPlayer = donburi.NewQuery(
+	filter.Contains(
+		component.PlayerTag,
+		component.Position,
+		component.Weapon,
+		component.PlayerStats,
+	),
+)
 
-func NewWeapon() *Weapon {
-	return &Weapon{
-		Cooldown:    20,
-		BulletSpeed: 5.0,
-		Damage:      1,
-	}
-}
+var queryWeaponEnemy = donburi.NewQuery(
+	filter.Contains(
+		component.EnemyTag,
+		component.Position,
+	),
+)
 
-func (w *Weapon) Update(playerX, playerY float64, enemies []*entity.Enemy, bullets *[]*entity.Bullet, level int) {
-	w.Timer--
-	if w.Timer > 0 {
-		return
-	}
-
-	var nearest *entity.Enemy
-	minDist := math.MaxFloat64
-	for _, e := range enemies {
-		if !e.Alive {
-			continue
+func UpdateWeapon(e *ecs.ECS) {
+	queryWeaponPlayer.Each(e.World, func(player *donburi.Entry) {
+		wpn := component.Weapon.Get(player)
+		wpn.Timer--
+		if wpn.Timer > 0 {
+			return
 		}
-		dx := e.Pos.X - playerX
-		dy := e.Pos.Y - playerY
+
+		playerPos := component.Position.GetValue(player)
+		stats := component.PlayerStats.GetValue(player)
+
+		var nearest *donburi.Entry
+		minDist := math.MaxFloat64
+
+		queryWeaponEnemy.Each(e.World, func(enemy *donburi.Entry) {
+			ePos := component.Position.GetValue(enemy)
+			dx := ePos.X - playerPos.X
+			dy := ePos.Y - playerPos.Y
+			dist := math.Sqrt(dx*dx + dy*dy)
+			if dist < minDist {
+				minDist = dist
+				nearest = enemy
+			}
+		})
+
+		if nearest == nil {
+			return
+		}
+
+		wpn.Timer = wpn.Cooldown
+		ePos := component.Position.GetValue(nearest)
+		dx := ePos.X - playerPos.X
+		dy := ePos.Y - playerPos.Y
 		dist := math.Sqrt(dx*dx + dy*dy)
-		if dist < minDist {
-			minDist = dist
-			nearest = e
-		}
-	}
+		vx := (dx / dist) * wpn.BulletSpeed
+		vy := (dy / dist) * wpn.BulletSpeed
+		dmg := wpn.BaseDamage + (stats.Level-1)/2
 
-	if nearest == nil {
-		return
-	}
-
-	w.Timer = w.Cooldown
-	dx := nearest.Pos.X - playerX
-	dy := nearest.Pos.Y - playerY
-	dist := math.Sqrt(dx*dx + dy*dy)
-	vx := (dx / dist) * w.BulletSpeed
-	vy := (dy / dist) * w.BulletSpeed
-
-	dmg := w.Damage + (level-1)/2
-
-	*bullets = append(*bullets, &entity.Bullet{
-		Pos:    entity.Position{X: playerX, Y: playerY},
-		VX:     vx,
-		VY:     vy,
-		Radius: 3,
-		Damage: dmg,
-		Alive:  true,
+		archetype.CreateBullet(e.World, playerPos.X, playerPos.Y, vx, vy, dmg)
 	})
 }

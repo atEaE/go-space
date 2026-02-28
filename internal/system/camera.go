@@ -1,14 +1,27 @@
 package system
 
-type Camera struct {
-	X, Y float64
-}
+import (
+	"github.com/yohamta/donburi"
+	"github.com/yohamta/donburi/ecs"
+	"github.com/yohamta/donburi/filter"
 
-func (c *Camera) Update(playerX, playerY float64, screenWidth, screenHeight int) {
-	c.X = playerX - float64(screenWidth)/2
-	c.Y = playerY - float64(screenHeight)/2
-}
+	"github.com/atEaE/go-space/internal/component"
+	"github.com/atEaE/go-space/internal/config"
+)
 
-func (c *Camera) WorldToScreen(wx, wy float64) (float32, float32) {
-	return float32(wx - c.X), float32(wy - c.Y)
+var queryCamera = donburi.NewQuery(
+	filter.Contains(
+		component.PlayerTag,
+		component.Position,
+	),
+)
+
+func UpdateCamera(e *ecs.ECS) {
+	cam := component.Camera.Get(component.Camera.MustFirst(e.World))
+
+	queryCamera.Each(e.World, func(entry *donburi.Entry) {
+		pos := component.Position.GetValue(entry)
+		cam.X = pos.X - float64(config.ScreenWidth)/2
+		cam.Y = pos.Y - float64(config.ScreenHeight)/2
+	})
 }

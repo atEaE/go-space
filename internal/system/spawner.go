@@ -1,24 +1,35 @@
 package system
 
-import "github.com/atEaE/go-space/internal/entity"
+import (
+	"github.com/yohamta/donburi"
+	"github.com/yohamta/donburi/ecs"
+	"github.com/yohamta/donburi/filter"
 
-type EnemySpawner struct {
-	Timer int
-	Rate  int
-}
+	"github.com/atEaE/go-space/internal/archetype"
+	"github.com/atEaE/go-space/internal/component"
+)
 
-func NewEnemySpawner() *EnemySpawner {
-	return &EnemySpawner{
-		Rate: 60,
+var querySpawnerPlayer = donburi.NewQuery(
+	filter.Contains(
+		component.PlayerTag,
+		component.Position,
+	),
+)
+
+func UpdateSpawner(e *ecs.ECS) {
+	spawner := component.Spawner.Get(component.Spawner.MustFirst(e.World))
+	gs := component.GameState.GetValue(component.GameState.MustFirst(e.World))
+
+	spawner.Timer++
+
+	currentRate := max(spawner.Rate-gs.Tick/600, 15)
+
+	if spawner.Timer >= currentRate {
+		spawner.Timer = 0
+
+		querySpawnerPlayer.Each(e.World, func(entry *donburi.Entry) {
+			pos := component.Position.GetValue(entry)
+			archetype.CreateEnemy(e.World, pos.X, pos.Y)
+		})
 	}
-}
-
-func (s *EnemySpawner) Update(tick int, playerX, playerY float64) *entity.Enemy {
-	s.Timer++
-	currentRate := max(s.Rate-tick/600, 15)
-	if s.Timer >= currentRate {
-		s.Timer = 0
-		return entity.NewEnemy(playerX, playerY)
-	}
-	return nil
 }
