@@ -2,6 +2,9 @@
   "permissions": {
     "allow": [
       "WebSearch"
+    ],
+    "deny": [
+      "Edit(.claude/settings.json)"
     ]
   }
 }
