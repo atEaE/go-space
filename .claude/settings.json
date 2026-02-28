@@ -7,7 +7,9 @@
       "WebFetch(domain:ebitengine.org)",
       "WebFetch(domain:ebiten.org)",
       "Bash(go mod tidy)",
-      "Bash(go build *)"
+      "Bash(go build *)",
+      "Bash(go test *)",
+      "Bash(go tool golangci-lint *)"
     ],
     "deny": [
       "Edit(.claude/settings.json)"
