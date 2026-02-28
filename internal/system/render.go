@@ -118,6 +118,15 @@ func DrawHUD(e *ecs.ECS, screen *ebiten.Image) {
 
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("FPS: %.0f", ebiten.ActualFPS()), 8, 40)
 
+	if gs.Paused {
+		// ポーズ中 : 半透明オーバーレイとテキストを表示。
+		overlay := ebiten.NewImage(config.ScreenWidth, config.ScreenHeight)
+		overlay.Fill(color.RGBA{R: 0, G: 0, B: 0, A: 120})
+		screen.DrawImage(overlay, nil)
+		ebitenutil.DebugPrintAt(screen, "PAUSED - Press Escape to Resume",
+			config.ScreenWidth/2-100, config.ScreenHeight/2)
+	}
+
 	if gs.GameOver {
 		ebitenutil.DebugPrintAt(screen, "GAME OVER - Press R to Return to Title",
 			config.ScreenWidth/2-120, config.ScreenHeight/2)

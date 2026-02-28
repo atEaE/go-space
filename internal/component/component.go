@@ -63,9 +63,10 @@ type SpawnerData struct {
 	Rate  int
 }
 
-// GameStateData : ゲーム全体の状態(ゲームオーバー判定、経過ティック)。
+// GameStateData : ゲーム全体の状態(ゲームオーバー判定、ポーズ判定、経過ティック)。
 type GameStateData struct {
 	GameOver bool
+	Paused   bool
 	Tick     int
 }
 

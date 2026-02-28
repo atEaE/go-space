@@ -82,6 +82,13 @@ func (g *Game) Update() error {
 			}
 			return nil
 		}
+		// ポーズトグル : GameOverでない場合のみEscapeキーでポーズを切り替える。
+		if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
+			gs.Paused = !gs.Paused
+		}
+		if gs.Paused {
+			return nil
+		}
 		g.ecs.Update()
 	}
 	return nil
